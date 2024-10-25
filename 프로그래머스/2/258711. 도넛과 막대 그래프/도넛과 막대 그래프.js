@@ -33,7 +33,7 @@ function solution(edges) {
         else if (inCnt[i] >= 2 && outCnt[i] >= 2) {
             answer[3] += 1; 
         } 
-        // 도넛 모양 
+        // 도넛 모양 but 중간애랑 연결된 애 빼고
         else if (inCnt[i] === 0 && outCnt[i] > 1) {
             answer[0] = i + 1;
             totalCnt = outCnt[i];
