@@ -7,33 +7,34 @@ const input = require('fs')
 
 const N = Number(input[0])
 
-const plusMinus = [];
+const lines = input.slice(1).map(v => {
+  let [start, end] = v.split(' ').map(Number)
+  return [start, end]
+})
 
-for (let i = 1; i <= N; i++) {
-  const [start, end] = input[i].split(' ').map(Number);
-  plusMinus.push([start, 1]); 
-  plusMinus.push([end, -1]); 
-}
+lines.sort((a, b) => a[0] - b[0])
 
-plusMinus.sort((a, b) => a[0] - b[0] || a[1] - b[1])
+// console.log(lines)
 
-let totalLen = 0 // 총 길이 (누적합)
+let totalCnt = 0
+let left = lines[0][0]
+let right = lines[0][1]
 
-let overlap = 0 // 지금 겹친 선 갯수
-let lastLine = 0 // 마지막으로 처리한 위치
+for (let i=1; i<N; i++) {
 
-// 누적합 += (지금 - 마지막으로 겹친 구간)
+  // 겹치지 않는 상태 -> 끝 점이 다음 시작점보다 작은 경우
+  if (right < lines[i][0]) {
+    totalCnt += (right - left) // 구간 누적
 
-for (let i=0; i<plusMinus.length; i++) {
-  const [line, sum] = plusMinus[i]
+    left = lines[i][0]
+    right = lines[i][1]
 
-  // 선이 겹치는 구간
-  if (overlap > 0) {
-    totalLen += (line - lastLine)
+    // 겹치는 상태 -> 끝 점이 다음 시작점이랑 같거나 큼
+  } else if (lines[i][0] <= right && lines[i][1] >= right) {
+    right = lines[i][1] // 다음 끝점으로 넘어감
   }
-
-  overlap += sum // +1 -1 
-  lastLine = line
 }
 
-console.log(totalLen)
+// 마지막 길이 더하기
+totalCnt += (right -left)
+console.log(totalCnt)
