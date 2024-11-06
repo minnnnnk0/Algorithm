@@ -45,7 +45,7 @@ class MinHeap {
     }
     this.heap[index] = element
   }
-  
+
   bubbleDown(index) {
     const length = this.heap.length
     const element = this.heap[index]
@@ -95,6 +95,8 @@ pq.push([0, 0, 0]) // [체력, x, y]
 
 while (!pq.isEmpty()) {
   const [power, x, y] = pq.shift()
+
+  if (power > visited[x][y]) continue
 
   // 도착 지점
   if (x === N - 1 && y === N - 1) {
