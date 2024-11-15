@@ -18,18 +18,7 @@ const dy = [0, 1]
 let maxNum = -Infinity
 let minNum = Infinity
 
-const calc = (a, b, oper) => {
-  switch (oper) {
-    case '+':
-      return a + b
-    case '-':
-      return a - b
-    case '*':
-      return a * b
-  }
-}
-
-const dfs = (x, y, num, oper) => {
+const dfs = (x, y, num) => {
 
   // 도착 지점
   if (x === n-1 && y === n-1) {
@@ -45,14 +34,33 @@ const dfs = (x, y, num, oper) => {
 
     if (nx >= n || ny >= n) continue
 
-    if ((nx + ny) % 2 === 1) {
-      dfs(nx, ny, num, arr[nx][ny]) // 연산자
-    } else {
-      // 숫자 처리
-      dfs(nx, ny, calc(num, +arr[nx][ny], oper), null) // 숫자 처리 후 연산자 null
+    if ((x+y) % 2 === 0) { // 숫자일 때
+      dfs(nx, ny, num)
+
+    } else { // 연산자일 때
+
+      // console.log(typeof(arr[nx][ny]))
+      const intNum = parseInt(arr[nx][ny]) // 다음 값 숫자 처리
+
+      if (arr[x][y] === '*') {
+        dfs(nx, ny, num * intNum)
+      } else if (arr[x][y] === '+') {
+        dfs(nx, ny, num + intNum)
+      } else if (arr[x][y] === '-') {
+        dfs(nx, ny, num - intNum)
+      }
     }
   }
 }
 
-dfs(0, 0, +arr[0][0], null)
-console.log(`${maxNum} ${minNum}`)
+for (let i=0; i<n; i++) {
+  for (let j=0; j<n; j++) {
+
+    if ((i+j) % 2 === 0) {
+      arr[i][j] = parseInt(arr[i][j])
+    }
+  }
+}
+
+dfs(0, 0, arr[0][0])
+console.log(`${maxNum } ${minNum}`);
