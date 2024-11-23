@@ -14,6 +14,7 @@ for (let k=0; k<N; k++) {
   for (let i=0; i<N; i++) {
     for (let j=0; j<N; j++) {
 
+      if (time[i][j] <= time[i][k] + time[k][j]) continue
       time[i][j] = Math.min(time[i][j], time[i][k] + time[k][j])
     }
   }
