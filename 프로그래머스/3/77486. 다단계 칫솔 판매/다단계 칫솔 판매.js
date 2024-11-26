@@ -12,9 +12,8 @@ function solution(enroll, referral, seller, amount) {
 
     for (let i=0; i<seller.length; i++) {
         
-        const sellerName = seller[i]
+        let curSeller = seller[i]
         let curMoney = amount[i] * 100
-        let curSeller = sellerName
 
         while (curSeller !== '-' && curMoney > 0) {
             
