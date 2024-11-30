@@ -2,36 +2,37 @@ function solution(s) {
     const answer = []
 
     s.forEach((str) => {
-        const stack = []
+        
+        const word = []
+        let idx = 0
         let cnt = 0
-        let len = str.length
 
         // 110 제거
-        for (let i=0; i<len; i++) {
-            if (stack.length >= 2 && str[i] === '0' && stack[stack.length - 1] === '1' && stack[stack.length - 2] === '1') {
-                stack.pop() // 1 제거
-                stack.pop() // 1 제거
-                cnt++     // 110
-            } else {
-                stack.push(str[i])
+        for (let i=0; i<str.length; i++) {
+            word[idx] = str[i]
+            idx++
+
+            if (idx >= 3 && word[idx - 1] === '0' && word[idx - 2] === '1' && word[idx - 3] === '1') {
+                idx -= 3
+                cnt++
             }
         }
 
-        let rest = stack.join('')
-        
-        if (cnt > 0) {
-            
-            if (rest.includes('11')) {
-                // 11이 있 -> 첫 번째 11 앞에 삽입
-                let idx = rest.indexOf('11')
-                rest = rest.slice(0, idx) + '110'.repeat(cnt) + rest.slice(idx)
-            } else {
-                // 11이 없 -> 마지막 0 뒤에 삽입
-                let idx = rest.lastIndexOf('0') + 1
-                rest = rest.slice(0, idx) + '110'.repeat(cnt) + rest.slice(idx)
-            }
+        const string = word.slice(0, idx).join('')
+
+        // 110 삽입
+        const addNum = '110'.repeat(cnt)
+        const idx0 = string.lastIndexOf('0')
+
+        let result = ''
+        if (idx0 < 0) {
+            result = addNum + string // 0 없 -> 맨 앞에 삽입
+        } else {
+            result = string.slice(0, idx0 + 1) + addNum + string.slice(idx0 + 1)
         }
-        answer.push(rest)
-    })
+
+        answer.push(result)
+    });
+
     return answer
 }
