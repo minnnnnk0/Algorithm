@@ -1,34 +1,46 @@
 function solution(s) {
-    const answer = []
+    
+    const getNum = (stack) => {
+        if (stack.length < 3) return false
 
-    for (const str of s) {
+        if ( stack[stack.length - 3] === "1" && stack[stack.length - 2] === "1" && stack[stack.length - 1] === "0"
+        ) return true   
+        return false
+    }
+
+    const sliceStack = (str) => {
         
-        let word = []
+        const stack = []
         let cnt = 0
 
-        // 110 제거
         for (let i=0; i<str.length; i++) {
-            word.push(str[i])
+            stack.push(str[i])
 
-            if (word.length < 3 || word.slice(-3).join('') !== '110') continue
-            word.splice(-3, 3)
-            cnt++ 
-            
+            if (!getNum(stack)) continue
+            stack.pop()
+            stack.pop()
+            stack.pop()
+            cnt++
         }
 
-        const string = word.join('')
-        const addNum = '110'.repeat(cnt)
-
-        // 마지막 0을 찾고 그 뒤에 110 삽입
-        const idx0 = string.lastIndexOf('0')
-        let result
-        
-        if (idx0 < 0) {
-            result = addNum + string
-        } else {
-            result = string.slice(0, idx0 + 1) + addNum + string.slice(idx0 + 1)
-        }
-        answer.push(result)
+        return [stack.join(''), cnt]
     }
-    return answer
+
+    const change = (str) => {
+        
+        const target = "110"
+        const [rest, count] = sliceStack(str)
+        const lastZeroIndex = rest.lastIndexOf("0")
+
+        if (!rest.length) return target.repeat(count)
+        if (lastZeroIndex === -1) return target.repeat(count) + rest
+
+        return (
+            rest.slice(0, lastZeroIndex + 1) +
+            target.repeat(count) +
+            rest.slice(lastZeroIndex + 1, rest.length)
+        )
+    }
+
+    return s.map(change)
 }
